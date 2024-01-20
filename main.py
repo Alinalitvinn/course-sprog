@@ -100,10 +100,10 @@ print(f"\nСтандартизовані вибрані дані:\n{standardized
 # Завдання 5
 # Heatmap
 plt.figure(figsize=(10, 6))
-heat_data = dataframe.iloc[:20, 3:7]
-sub_data = heat_data.to_numpy()
+heat_data = dataframe.iloc[:20, 4:8].corr()
 
-sns.heatmap(data=sub_data, cmap='crest', vmin=sub_data.min(), vmax=sub_data.max(), annot=True, linewidth=.5, fmt=".2f")
+print(f"Кореляція:\n{heat_data}")
+sns.heatmap(data=heat_data, cmap='crest', annot=True, linewidth=.5, fmt=".2f")
 
 plt.ylabel('Ціна, $')
 plt.title('Різні позиції цін на валюти')
@@ -157,7 +157,7 @@ plt.figure(figsize=(10, 6))
 
 selected_data = dataframe[dataframe['Date'] == '2020-10-05 23:59:59']
 crypto_df = selected_data[~selected_data['Name'].isin(['Bitcoin', 'Wrapped Bitcoin', 'Ethereum'])]
-sns.histplot(data=crypto_df, x='Close', bins=30, hue='Name')
+sns.histplot(data=crypto_df, x='Close', bins=30)
     
 plt.xlabel('Ціна на укладанні угоди')
 plt.xticks(rotation=90)
@@ -170,18 +170,18 @@ fig, ax = plt.subplots()
 
 data = dataframe
 data.reset_index(inplace=True)
-btc_df = data[data['Name'].isin(['Bitcoin', 'Wrapped Bitcoin', 'Ethereum'])]
+crypto_df = selected_data[~selected_data['Name'].isin(['Bitcoin', 'Wrapped Bitcoin', 'Ethereum'])]
 
 for column in ['High','Low','Open','Close']:
-    ax.plot(btc_df['Name'], btc_df[column], label=column)
+    ax.plot(crypto_df['Name'], crypto_df[column], label=column)
 
 ax.legend()
 
-y_values = btc_df[data.columns[6:10]].mean().values
-x_values = btc_df['Name'].unique()
+y_values = crypto_df[data.columns[6:10]].mean().values
+x_values = crypto_df['Name'].unique()
 
-for x,y in zip(x_values, y_values):  
-    ax.annotate(f"{y:.2f}", xy=(x,y), xytext=(5, 5), textcoords='offset points') 
+for x, y in zip(x_values, y_values):
+    ax.annotate(f"{y:.2f}", xy=(x, y), xytext=(5, 5), textcoords='offset points') 
         
 ax.autoscale()
 plt.xticks(rotation=90)
