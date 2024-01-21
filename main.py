@@ -166,26 +166,24 @@ plt.show()
 
 # Завдання 6
 plt.figure(figsize=(10, 6))
-fig, ax = plt.subplots()
 
 data = dataframe
-data.reset_index(inplace=True)
-crypto_df = selected_data[~selected_data['Name'].isin(['Bitcoin', 'Wrapped Bitcoin', 'Ethereum'])]
+means = data[['High', 'Low', 'Open', 'Close']].mean()
 
-for column in ['High','Low','Open','Close']:
-    ax.plot(crypto_df['Name'], crypto_df[column], label=column)
+fig, ax = plt.subplots()
 
+ax.plot(data.index, data['High'], label='High')
+ax.plot(data.index, data['Low'], label='Low')
+ax.plot(data.index, data['Open'], label='Open')  
+ax.plot(data.index, data['Close'], label='Close')
 ax.legend()
 
-y_values = crypto_df[data.columns[6:10]].mean().values
-x_values = crypto_df['Name'].unique()
+# plt.figure(fig.number)
 
-for x, y in zip(x_values, y_values):
-    ax.annotate(f"{y:.2f}", xy=(x, y), xytext=(5, 5), textcoords='offset points') 
-        
-ax.autoscale()
-plt.xticks(rotation=90)
-plt.show()
+# offset = 0
+# for column, value in means.items():
+#     offset += 2
+#     plt.annotate(f'{value:.2f}', xy=(0, value),  xytext=(offset, offset + 1), textcoords='data')
 
 # Завдання 6: додатково побудувати PairPlot
 data = dataframe.iloc[:400, 5:9]
